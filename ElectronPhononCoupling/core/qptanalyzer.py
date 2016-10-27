@@ -624,10 +624,10 @@ class QptAnalyzer(object):
     
         # nband
         occ = self.get_occ_nospin()
-    
+
         # nkpt, nband, nband
-        delta_E_ddw = (einsum('ij,k->ijk', eig0[0,:,:].real, ones(nband))
-                     - einsum('ij,k->ikj', eig0[0,:,:].real, ones(nband))
+        delta_E_ddw = (einsum('ij,k->ijk', self.eig0.EIG[0,:,:].real, ones(nband))
+                     - einsum('ij,k->ikj', self.eig0.EIG[0,:,:].real, ones(nband))
                      - einsum('ij,k->ijk', ones((nkpt,nband)), (2*occ-1)) * self.smearing * 1j)
     
         # nkpt, nband
@@ -650,7 +650,7 @@ class QptAnalyzer(object):
             # nkpt, nband, nomegase
             # delta_E_omega[ikpt,jband,lomega] = omega[lomega] + E[ikpt,jband] - E[ikpt,kband] - (2f[kband] -1) * eta * 1j
             delta_E_omega = (einsum('ij,l->ijl', delta_E, ones(nomegase))
-                           + einsum('ij,l->ijl', ones((nkpt,nband)), omegase))
+                           + einsum('ij,l->ijl', ones((nkpt,nband)), self.omegase))
     
             # nkpt, nband, nomegase, nmode
             deno1 = (einsum('ijl,m->ijlm', delta_E_omega, ones(3*natom))
@@ -685,8 +685,8 @@ class QptAnalyzer(object):
     
         self.sigma = (fan_term - ddw_term) * self.wtq
     
-        self.sigma = self.eig0.make_average(qpt_sigma)
-        self.sigma = einsum('mij->ijm', qpt_sigma)
+        self.sigma = self.eig0.make_average(self.sigma)
+        self.sigma = einsum('mij->ijm', self.sigma)
       
         return self.sigma
 

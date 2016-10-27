@@ -160,7 +160,7 @@ class EpcAnalyzer(object):
                           'keyword argument ')
 
     def set_omega_range(self, omega_range=(0, 0, 1)):
-        """Set the minimum, makimum and step frequency for the self-energy."""
+        """Set the minimum, makimum and step frequency for the self-energy.""" 
         self.omegase = np.arange(*omega_range, dtype=float)
         self.nomegase = len(self.omegase)
         self.qptanalyzer.omegase = self.omegase
